@@ -1,0 +1,59 @@
+name: ci
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        machine: [ "alpha", "amd64", "hpcarm", "hppa", "i386", "macppc", "sparc", "sparc64", "sun2", "sun3", "vax", "virt68k", "zaurus" ]
+        include:
+          # qemu requires -kernel [kernel file] option on these architectures
+          - machine: alpha
+            kernel: src/obj.alpha/releasedir/alpha/kernel/netbsd-GENERIC.gz
+          - machine: virt68k
+            kernel: src/obj.virt68k/releasedir/virt68k/kernel/netbsd-GENERIC.gz
+
+    steps:
+    - name: setup build environment
+      run: |
+        sudo apt install -y build-essential flex
+
+    - name: checkout netbsd/src
+      uses: actions/checkout@v4
+      with:
+        repository: netbsd/src
+        path: src
+
+    - name: checkout netbsd/xsrc
+      uses: actions/checkout@v4
+      with:
+        repository: netbsd/xsrc
+        path: xsrc
+
+    - name: build release and live-image
+      run: |
+        DISTRIBVER="$(sh src/sys/conf/osrelease.sh)"
+        echo "DISTRIBVER=$DISTRIBVER" >> $GITHUB_ENV
+        case "${{ matrix.machine }}" in
+        sun2)
+          XOPTS=""
+          ;;
+        *)
+          XOPTS="-x -X ../xsrc"
+          ;;
+        esac
+        JOBS=4
+        (cd src && sh build.sh -U -u ${XOPTS} -j ${JOBS} -N 0 -m ${{ matrix.machine }} -V OBJMACHINE=yes release live-image)
+
+    - name: upload liveimages
+      uses: actions/upload-artifact@v4
+      with:
+        name: NetBSD-${{ env.DISTRIBVER }}-${{ matrix.machine }}-live
+        path: |
+          src/obj.${{ matrix.machine }}/releasedir/images/
+          ${{ matrix.kernel }}
+        compression-level: 0	# no compression, images are already gzipped
