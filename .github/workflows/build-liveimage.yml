@@ -9,13 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [ "alpha", "amd64", "hpcarm", "hppa", "i386", "macppc", "sparc", "sparc64", "sun2", "sun3", "vax", "virt68k", "zaurus" ]
-        include:
-          # qemu requires -kernel [kernel file] option on these architectures
-          - machine: alpha
-            kernel: src/obj.alpha/releasedir/alpha/kernel/netbsd-GENERIC.gz
-          - machine: virt68k
-            kernel: src/obj.virt68k/releasedir/virt68k/kernel/netbsd-GENERIC.gz
+        machine: [ "amd64", "hpcarm", "i386", "sparc", "sparc64", "sun2", "sun3", "vax", "zaurus" ]
 
     steps:
     - name: setup build environment
@@ -27,12 +21,14 @@ jobs:
       with:
         repository: netbsd/src
         path: src
+        ref: 508d3376a4dfe2e984650ec7a5ca05f8990251a0
 
     - name: checkout netbsd/xsrc
       uses: actions/checkout@v4
       with:
         repository: netbsd/xsrc
         path: xsrc
+        ref: 11b985bc086c13ff9542497f5a74001d6a34687d
 
     - name: build release and live-image
       run: |
@@ -55,5 +51,4 @@ jobs:
         name: NetBSD-${{ env.DISTRIBVER }}-${{ matrix.machine }}-live
         path: |
           src/obj.${{ matrix.machine }}/releasedir/images/
-          ${{ matrix.kernel }}
         compression-level: 0	# no compression, images are already gzipped
