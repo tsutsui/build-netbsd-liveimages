@@ -23,13 +23,13 @@ jobs:
         sudo apt install -y build-essential flex
 
     - name: checkout netbsd/src
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: netbsd/src
         path: src
 
     - name: checkout netbsd/xsrc
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: netbsd/xsrc
         path: xsrc
