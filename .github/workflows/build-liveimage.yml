@@ -47,7 +47,7 @@ jobs:
           ;;
         esac
         JOBS=4
-        (cd src && sh build.sh -U -u ${XOPTS} -j ${JOBS} -N 0 -m ${{ matrix.machine }} -V OBJMACHINE=yes release live-image)
+        (cd src && sh build.sh -U -u ${XOPTS} -j ${JOBS} -N 0 -m ${{ matrix.machine }} -V OBJMACHINE=yes release live-image cleandir)
 
     - name: upload liveimages
       uses: actions/upload-artifact@v4
