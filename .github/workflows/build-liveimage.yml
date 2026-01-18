@@ -27,12 +27,14 @@ jobs:
       with:
         repository: netbsd/src
         path: src
+        ref: netbsd-11
 
     - name: checkout netbsd/xsrc
       uses: actions/checkout@v6
       with:
         repository: netbsd/xsrc
         path: xsrc
+        ref: netbsd-11
 
     - name: build release and live-image
       run: |
