@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [ "alpha", "amd64", "hpcarm", "hppa", "i386", "macppc", "sparc", "sparc64", "sun2", "sun3", "vax", "virt68k", "zaurus" ]
+        machine: [ "alpha", "amd64", "hpcarm", "hppa", "i386", "luna68k", "macppc", "sparc", "sparc64", "sun2", "sun3", "vax", "virt68k", "zaurus" ]
         include:
           # qemu requires -kernel [kernel file] option on these architectures
           - machine: alpha
