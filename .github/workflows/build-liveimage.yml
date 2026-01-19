@@ -52,7 +52,7 @@ jobs:
         (cd src && sh build.sh -U -u ${XOPTS} -j ${JOBS} -N 0 -m ${{ matrix.machine }} -V OBJMACHINE=yes release cleandir live-image)
 
     - name: upload liveimages
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: NetBSD-${{ env.DISTRIBVER }}-${{ matrix.machine }}-live
         path: |
