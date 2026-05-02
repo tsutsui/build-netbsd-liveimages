@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: setup build environment
       run: |
-        sudo apt install -y build-essential flex
+        sudo apt install -y build-essential
 
     - name: checkout netbsd/src
       uses: actions/checkout@v6
